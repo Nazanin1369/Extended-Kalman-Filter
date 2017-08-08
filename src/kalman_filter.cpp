@@ -80,24 +80,21 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
    * update the state by using Extended Kalman Filter equations
   */
 
-  // convert radar measurements from cartesian coordinates (x, y, vx, vy) to polar (rho, phi, rho_dot).
-  VectorXd z_pred = RadarCartesianToPolar(x_);
+  float rho = sqrt(x_(0)*x_(0) + x_(1)*x_(1));
+  float phi = atan2(x_(1), x_(0));
+  float rho_dot;
+  if (fabs(rho) < 0.0001) {
+    rho_dot = 0;
+  } else {
+    rho_dot = (x_(0)*x_(2) + x_(1)*x_(3))/rho;
+  }
+  VectorXd z_pred(3);
+  z_pred << rho, phi, rho_dot;
   VectorXd y = z - z_pred;
-
-  // normalize the angle between -pi to pi
-  while(y(1) > M_PI){
-    y(1) -= PI2;
-  }
-
-  while(y(1) < -M_PI){
-    y(1) += PI2;
-  }
-
-  // following is exact the same as in the function of KalmanFilter::Update()
   MatrixXd Ht = H_.transpose();
-  MatrixXd PHt = P_ * Ht;
-  MatrixXd S = H_ * PHt + R_;
+  MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
+  MatrixXd PHt = P_ * Ht;
   MatrixXd K = PHt * Si;
 
   //new estimate
