@@ -1,4 +1,6 @@
-# Extended Kalman Filter Project Starter Code
+# Extended Kalman Filter
+
+![Result](/result.png "Extended KAlman Filter")
 
 In this project I utilized a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance outlined in the project rubric. 
 
