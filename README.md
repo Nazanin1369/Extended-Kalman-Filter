@@ -1,4 +1,4 @@
-# Extended Kalman Filter
+# Extended Kalman Filter Project
 
 ![Result](/result.png "Extended KAlman Filter")
 
